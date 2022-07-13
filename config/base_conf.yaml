@@ -1,0 +1,36 @@
+epochs:
+  desc: Number of epochs to train over
+  value: 31
+batch_size:
+  desc: Size of each batch
+  value: 256
+lr:
+  desc: Learning rate
+  value: 0.0005
+block_size:
+  desc: Number of blocks
+  value: 5
+permuter:
+  desc: type of permutation
+  value: LinearLU # manual reverse random manual
+wt_f_l:
+  desc: weight for the flow loss
+  value: 2
+wt_c_l:
+  desc: weight for the centralizing loss
+  value: 1
+wt_mmd_l:
+  desc: weight for the mmd loss
+  value: 0.1
+net:
+  desc: type olf MLP
+  value: MLP #MLPR # MLP
+non_linearity:
+  desc: non linear function for Affine Coupling
+  value: leakyrelu #prelu # relu leakyrelu
+act_norm:
+  desc: presence of actnorm
+  value: true
+
+
+   

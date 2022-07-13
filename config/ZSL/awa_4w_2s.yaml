@@ -1,0 +1,51 @@
+OUTPUT_DIR: "checkpoints/awa_4w_2s/trans/"
+LOG_FILE_NAME: "ZSL.log"
+MODEL_FILE_NAME: "best_model.pth"
+MODEL:
+  META_ARCHITECTURE: "ZSLModel"
+  SCALE: 25.0
+  ATTEN_THR: 9.
+  HID: 512
+  BACKBONE:
+    PRETRAINED: True
+  ATTENTION:
+    CHANNEL: 512
+    WEIGHT_SHARED: True
+    W2V_PATH: "datasets/Attribute/w2v"
+  LOSS:
+    LAMBDA1: 1. #L_reg
+    LAMBDA2: 1. #L_ad
+    LAMBDA3: 1. #L_cpt
+    LAMBDA4: 1. #L_cls_att
+    LAMBDA5: 1. #L_proto
+    LAMBDA6: 1.
+    TEMP: 0.7
+    MARGIN: 0.8
+  RESUME_FROM: None
+  # RESUME_FROM:  checkpoints/awa_4w_2s/trans/best_model.pth
+#  RESUME_FROM: checkpoints/awa_4w_2s/
+
+DATASETS:
+  NAME: "AwA2"
+  IMAGE_SIZE: 448
+  WAYS: 4
+  SHOTS: 2
+
+DATALOADER:
+  # MODE: 'episode'
+  MODE: 'random'
+  N_BATCH: 300
+
+SOLVER:
+  MAX_EPOCH: 10
+  BASE_LR: 1e-3
+  WEIGHT_DECAY: 1e-5
+  MOMENTUM: 0.9
+  GAMMA: 0.5
+  STEPS: 10
+  DATA_AUG: "resize_random_crop"
+
+TEST:
+  IMS_PER_BATCH: 100
+  DATA_AUG: "resize_crop"
+  GAMMA: 2.5
