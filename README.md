@@ -9,4 +9,4 @@ This repo is built on [GEM-ZSL](https://github.com/osierboy/GEM-ZSL) [Class-Norm
 - timm
 
 # How to run
-see train_cub.sh
+see [train_cub.sh](train_cub.sh)
