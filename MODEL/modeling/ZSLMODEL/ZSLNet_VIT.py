@@ -9,7 +9,7 @@ from os.path import join
 import pickle
 import numpy as np
 import time
-from MODEL.modeling.lossModule import SupConLoss_clear,HardSupConLoss_clear
+from MODEL.modeling.lossModule import SupConLoss_clear
 from torch import distributed as dist
 from .nets import *
 from .class_name import *
