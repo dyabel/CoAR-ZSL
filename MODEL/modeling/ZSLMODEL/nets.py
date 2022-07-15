@@ -76,10 +76,7 @@ class ProtoModel(nn.Module):
         if with_cn:
             self.cn1 = ClassStandardization(hid_dim)
             self.cn1_att = ClassStandardization(hid_dim)
-            # self.cn1_att = nn.Identity()
-            # self.cn1 = nn.SyncBatchNorm(hid_dim)
-            # self.cn1_att = nn.SyncBatchNorm(hid_dim)
-
+          
         else:
             self.cn1 = nn.Identity()
             self.cn1_att = nn.Identity()
@@ -87,9 +84,7 @@ class ProtoModel(nn.Module):
         if with_cn:
             self.cn2 = ClassStandardization(hid_dim)
             self.cn2_att = ClassStandardization(hid_dim)
-            # self.cn2_att = nn.Identity()
-            # self.cn2 = nn.SyncBatchNorm(hid_dim)
-            # self.cn2_att = nn.SyncBatchNorm(hid_dim)
+           
         else:
             self.cn2 = nn.Identity()
             self.cn2_att = nn.Identity()
@@ -101,74 +96,21 @@ class ProtoModel(nn.Module):
             b = np.sqrt(3 * weight_var)
             self.fc3.weight.data.uniform_(-b, b)
             self.fc3_att.weight.data.uniform_(-b, b)
-            # self.model[-2].weight.data.uniform_(-b, b)
-        # nn.init.kaiming_uniform_(self.fc1.weight,nonlinearity='relu')
-        # nn.init.kaiming_uniform_(self.fc2.weight,nonlinearity='relu')
-        # weight_var = 1 / (hid_dim * attr_dim)
-        # b = np.sqrt(3 * weight_var)
-        # self.fc1.weight.data.uniform_(-b, b)
-        # weight_var = 1 / (hid_dim * hid_dim)
-        # b = np.sqrt(3 * weight_var)
-        # self.fc1.weight.data.uniform_(-b, b)
-        # nn.init.orthogonal_(self.fc3_att.weight)
+          
         nn.init.xavier_uniform_(self.fc1.weight)
         nn.init.xavier_uniform_(self.fc2.weight)
         nn.init.constant_(self.fc1.bias,0)
         nn.init.constant_(self.fc2.bias,0)
 
-        # self.fc1_att = nn.Linear(attr_dim, hid_dim)
-        # self.fc2_att = nn.Linear(hid_dim,hid_dim)
-        # self.w2c_fc = nn.Linear(300, attr_dim)
-        # nn.init.xavier_uniform_(self.fc1_att.weight)
-        # nn.init.xavier_uniform_(self.fc2_att.weight)
-        # nn.init.constant_(self.fc1_att.bias,0)
-        # nn.init.constant_(self.fc2_att.bias,0)
-
+       
     def forward(self, attrs, is_cls=True):
         if is_cls:
             protos = self.relu3(self.fc3(self.cn2(self.relu2(self.cn1(self.fc2(self.relu1(self.fc1(attrs))))))))
         else:
             protos = self.relu3(self.fc3_att(self.cn2_att(self.relu2(self.cn1_att(self.fc2(self.relu1(self.fc1(attrs))))))))
-            # print(self.relu2(self.cn1_att(self.fc2(self.relu1(self.fc1(attrs))))))
-            # attrs = F.relu(self.w2c_fc(attrs))
-            # protos = self.relu3(self.fc3_att(self.cn2_att(self.relu2(self.cn1_att(self.fc2_att(self.relu1(self.fc1_att(attrs))))))))
         return protos
 
-class ProtoModel1(nn.Module):
-    def __init__(self, attr_dim: int, hid_dim: int, proto_dim: int,with_cn: bool):
-        super().__init__()
-        self.fc1 = nn.Linear(attr_dim, hid_dim)
-        self.fc1_att = nn.Linear(attr_dim, hid_dim)
-        self.relu1 = nn.ReLU()
-        self.relu1_att = nn.ReLU()
-        self.fc2 = nn.Linear(hid_dim,hid_dim)
-        self.fc2_att = nn.Linear(hid_dim,hid_dim)
-        if with_cn:
-            self.cn1 = ClassStandardization(hid_dim)
-        self.relu2 = nn.ReLU()
-        if with_cn:
-            self.cn2 = ClassStandardization(hid_dim)
-        self.fc3 = nn.Linear(hid_dim,proto_dim)
-        self.relu3 = nn.ReLU()
-        if USE_PROPER_INIT:
-            weight_var = 1 / (hid_dim * proto_dim)
-            b = np.sqrt(3 * weight_var)
-            self.fc3.weight.data.uniform_(-b, b)
-        nn.init.kaiming_uniform_(self.fc1.weight,nonlinearity='relu')
-        nn.init.constant_(self.fc1.bias,0)
-        nn.init.kaiming_uniform_(self.fc2.weight,nonlinearity='relu')
-        nn.init.constant_(self.fc2.bias,0)
-        nn.init.kaiming_uniform_(self.fc1_att.weight,nonlinearity='relu')
-        nn.init.constant_(self.fc1_att.bias,0)
-        nn.init.kaiming_uniform_(self.fc2_att.weight,nonlinearity='relu')
-        nn.init.constant_(self.fc2_att.bias,0)
 
-    def forward(self, attrs, is_cls=True):
-        if is_cls:
-            protos = self.relu3(self.fc3(self.cn2(self.relu2(self.cn1(self.fc2(self.relu1(self.fc1(attrs))))))))
-        else:
-            protos = self.relu3(self.fc3(self.cn2(self.relu2(self.cn1(self.fc2_att(self.relu1_att(self.fc1_att(attrs))))))))
-        return protos
 
 
 def weight_init(*ms):
