@@ -42,12 +42,12 @@ def train_model(cfg, local_rank, distributed, seed=214):
     np.random.seed(local_seed)
     random.seed(local_seed)
     #TODO
-    """
+    # """
     g = torch.Generator()
     g.manual_seed(local_seed)
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic=True
-    """
+    # """
     model = build_zsl_pipeline(cfg)
     device = torch.device(cfg.MODEL.DEVICE)
     model = model.to(device)
