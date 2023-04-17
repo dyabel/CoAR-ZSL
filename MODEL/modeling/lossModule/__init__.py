@@ -1,1 +1,1 @@
-from .losses import SupConLoss,SupConLoss_clear,HardSupConLoss_clear
+from .losses import SupConLoss,SupConLoss_clear

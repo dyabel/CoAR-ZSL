@@ -6,6 +6,7 @@ pip install timm
 t=0.1
 k=0.7
 h=10.
+# j=999
 j=129
 i=0.1
 alpha=0.5
